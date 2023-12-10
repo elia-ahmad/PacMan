@@ -130,6 +130,7 @@ function stopMain(){
 	clearInterval(mainLoopInterval);
 	mainLoopInterval = undefined;
 }
+// Functions I've added, taken from Snake Game
 function ClearGrid()
 {
 	var DOMGrid = document.getElementById("grid_id");

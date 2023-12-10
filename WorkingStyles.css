@@ -15,8 +15,8 @@ body {
 }
 .grid {
     float:center;
-    width: 900px;
-    height: 900px;
+    width: 850px;
+    height: 990px;
     margin: 20 auto;
     display: flex; 
     flex-wrap: wrap;
@@ -25,13 +25,12 @@ body {
   .grid div {
     width: 50px;
     height: 50px;
-    border: 1px rgb(2, 59, 7) dotted;
 	  float: center;
   }
 .workingSpace {
   padding: 20px auto;
-  float: right;
-  width: 884px;
+  /* float: right; */
+  width: 850px;
   height: 990px;
   border: 4px rgb(0, 4, 255) solid;
 }
@@ -40,23 +39,22 @@ body {
   margin: 20px auto;
   height: 50px;
   color: #ffffff; /* White text */
-  font-family: 'Papyrus', monospace;
+  font-family: fantasy, monospace;
   font-size: 20px;
   padding: 20px; 
 }
 .secondary {
-  margin: 20px auto;
   display:grid;
   align-items: center;
-  width:400px;
-  height: 680px;
-  font-family: 'Papyrus', monospace;
+  text-align: center;
+  width:440px;
+  height: 990px;
+  font-family: fantasy, monospace;
   font-size: 25px;
   color: #ffffff; /* White text */
   border:2px rgb(0, 0, 255) solid;
 }
 .buttonSpace {
-  padding: 100px;
   align-items: center;
   height: 100px;
 }
@@ -71,6 +69,7 @@ body {
   min-height: 200px;
   border: 4px rgb(144, 211, 255) dotted;
   white-space: pre-wrap;
+  color: white;
 }
 
 .errorSpace {
@@ -86,21 +85,22 @@ body {
   min-height: 10px;
   border: 4px rgb(144, 211, 255) dotted;
   white-space: pre-wrap;
+  color: white;
 }
 .workingText {
-  font-family: 'Courier New', monospace;
+  font-family: fantasy, monospace;
   font-size: 30px;
   color: #ffffff; /* White text */
 }
 
 .btn {
-  padding: 5px;
   font-size: 35px;
-  font-style: italic;
+  font-family: fantasy, monospace;
   background-color: rgb(255, 242, 0);
   border: black;
   border-radius: 10px; /* For round corners */
   margin: 10px;
+  color: #1500ff;
 }
 
 .btn:hover {
@@ -110,6 +110,9 @@ body {
 .pageTitle{
   width: 100%;
   text-align: center;
+  font-size: 60px;
+  color: white;
+  font-family: fantasy, monospace;
 }
 
 .block {

@@ -37,9 +37,10 @@ let Timer; //for Tick and movement
 let timer; //for score
 var Hearts;
 var Score;
-let direction="up";
-let direction2="right";
-let direction3="left";
+let direction="up"; // Player
+let direction2="right"; // Red Monster
+let direction3="left"; // Orange Monster
+// Board creation and redraw
 function DrawBoard(){
 ClearGrid();
 //Add player
@@ -117,10 +118,26 @@ function Redraw(){
 		}
 	}
 }
+// Score and game start
 function Scoreboard(){
 clearAll();
 print("Score: "+Score);
 print("Lives: "+Hearts);
+let count=0;
+for(let y=0;y< board.length;y++){
+	for (let x=0;x< board[y].length;x++){
+		if(board[y][x]=="E"){
+			count++;
+		}
+		if(count==163){ 
+			//163 is the number of spaces aside from walls, and characters
+			//if all those spaces are Empty, that means no more points or fruits left
+			GameOver();
+			alert("Game Over! Your score is "+Score);
+			return null; // End Game
+		}
+	}
+}
 }
 function start(){
 	Hearts=3;
@@ -130,23 +147,33 @@ function start(){
 	OrangeMonster=[8,14];
 	Game();
 }
-function Tick(){
-	movePlayer();
-	Direction2Monster();
-	Direction3Monster();
-	moveMonster();
-	console.log(Score);
-}
-function Pause(){
+function Game(){
+	// Stop game then redo entire game for new game
 	clearInterval(Timer);
 	clearInterval(timer);
-}
-function Resume(){
-	Game();
-	timer= setInterval(Scoreboard, 200);
-}
-function Game(){
 	//Create the grid
+	// Reinitialize board to avoid double click of button problem
+	board = [
+		['W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W'],
+		['W','.','.','.','.','W','.','.','.','.','.','W','.','.','.','.','W'],
+		['W','.','W','W','.','W','.','W','W','W','.','W','.','W','W','.','W'],
+		['W','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','W'],
+		['W','.','W','.','.','W','W','.','W','.','W','W','.','.','W','.','W'],
+		['W','.','W','.','.','.','.','.','W','.','.','.','.','.','W','.','W'],
+		['W','.','W','W','W','.','.','W','W','W','.','.','W','W','W','.','W'],
+		['W','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','W'],
+		['W','W','.','W','W','.','.','W','.','W','.','.','W','W','.','W','W'],
+		['W','W','.','W','.','.','.','W','W','W','.','.','.','W','.','W','W'],
+		['W','W','.','.','.','W','.','.','.','.','.','W','.','.','.','W','W'],
+		['W','W','.','W','W','W','W','.','.','.','W','W','W','W','.','W','W'],
+		['W','W','.','.','.','.','.','.','W','.','.','.','.','.','.','W','W'],
+		['W','W','.','W','W','.','W','W','W','W','W','.','W','W','.','W','W'],
+		['W','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','W'],
+		['W','.','W','W','.','W','W','.','W','.','W','W','.','W','W','.','W'],
+		['W','.','W','W','.','W','.','.','W','.','.','W','.','W','W','.','W'],
+		['W','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','W'],
+		['W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W']
+		];
 	DrawBoard();
 	Timer=setInterval(Tick,500);
 	document.addEventListener("keydown",KeyPressed);
@@ -162,6 +189,15 @@ function Game(){
 	//Draw the block array
 	// drawBlockArray(blockArray);
 }
+// Main loop
+function Tick(){
+	movePlayer();
+	Direction2Monster();
+	Direction3Monster();
+	moveMonster();
+	console.log(Score);
+}
+// Directions and movement
 function KeyPressed(event){
 	//Play with the arrows or WASD
 	if( event.keyCode==38 || event.keyCode==87 ) direction="up";
@@ -173,9 +209,8 @@ if(event.keyCode==80 || event.keyCode==112) Pause();
 else if(event.keyCode==114 || event.keyCode==82) Resume();
 }
 function movePlayer(){
-	//Check if for next position
+	//Check for next position 
 	//Get x and y positions
-
 	let xPosePlayer= Player[0];
 	let yPosePlayer= Player[1];
 
@@ -187,55 +222,52 @@ if(board[yPosePlayer][xPosePlayer]=="O"|| board[yPosePlayer][xPosePlayer]=="R") 
 		return null; //to exit function
 	}
 	else {
-		board[yPosePlayer][xPosePlayer]="E";
 		GameOver('Player');
 		return null; //to exit function
 	}
 }
-//check if hit a fruit
-if(board[yPosePlayer][xPosePlayer]=="B" || board[yPosePlayer][xPosePlayer]=="S" || board[yPosePlayer][xPosePlayer]=="T" || board[yPosePlayer][xPosePlayer]=="C") {
-	Score= Score+50;
-}
-if(board[yPosePlayer][xPosePlayer]=="B") {
-let xPoseBanana=Banana[0];
-let yPoseBanana=Banana[1];
-board[yPoseBanana][xPoseBanana]="E";
-}
-if(board[yPosePlayer][xPosePlayer]=="S") {
-	let xPoseStrawberry=Strawberry[0];
-	let yPoseStrawberry=Strawberry[1];
-	board[yPoseStrawberry][xPoseStrawberry]="E";
-}
-if(board[yPosePlayer][xPosePlayer]=="T") {
-	let xPoseWatermelon=Watermelon[0];
-	let yPoseWatermelon=Watermelon[1];
-	board[yPoseWatermelon][xPoseWatermelon]="E";
-}
-if(board[yPosePlayer][xPosePlayer]=="C") {
-	let xPoseCherry=Cherry[0];
-	let yPoseCherry=Cherry[1];
-	board[yPoseCherry][xPoseCherry]="E";
-}
-if(board[yPosePlayer][xPosePlayer]==".") {
-	Score= Score+10;
-	let xPosPoint=Player[0];
-	let yPosPoint=Player[1];
-	board[yPosPoint][xPosPoint]="E";
-}
-	// Wall and update direction
+	// Check for wall and update direction. Update tile to EMpty to replace
 	if(direction=="up" && board[yPosePlayer-1][xPosePlayer]!="W"){
+		//check if hit a fruit or point, increase score
+		if(board[yPosePlayer-1][xPosePlayer]=="B" || board[yPosePlayer-1][xPosePlayer]=="S" || board[yPosePlayer-1][xPosePlayer]=="T" || board[yPosePlayer-1][xPosePlayer]=="C") {
+			Score+=50;
+		}
+		if(board[yPosePlayer-1][xPosePlayer]==".") {
+		Score+=10;
+		}
 		board[yPosePlayer][xPosePlayer]="E";
 		yPosePlayer--;
 	}
 	else if(direction=="right" && board[yPosePlayer][xPosePlayer+1]!="W"){
+		//check if hit a fruit or point, increase score
+		if(board[yPosePlayer][xPosePlayer+1]=="B" || board[yPosePlayer][xPosePlayer+1]=="S" || board[yPosePlayer][xPosePlayer+1]=="T" || board[yPosePlayer][xPosePlayer+1]=="C") {
+			Score+=50;
+		}
+		if(board[yPosePlayer][xPosePlayer+1]==".") {
+		Score+=10;
+		}
 		board[yPosePlayer][xPosePlayer]="E";
 		xPosePlayer++;
 	}
 	else if(direction=="left" && board[yPosePlayer][xPosePlayer-1]!="W"){
-	board[yPosePlayer][xPosePlayer]="E";
-	xPosePlayer--;
+		//check if hit a fruit or point, increase score
+		if(board[yPosePlayer][xPosePlayer-1]=="B" || board[yPosePlayer][xPosePlayer-1]=="S" || board[yPosePlayer][xPosePlayer-1]=="T" || board[yPosePlayer][xPosePlayer-1]=="C") {
+		Score+=50;
+		}
+		if(board[yPosePlayer][xPosePlayer-1]==".") {
+		Score+=10;
+		}
+		board[yPosePlayer][xPosePlayer]="E";
+		xPosePlayer--;
 	}
 	else if(direction=="down" && board[yPosePlayer+1][xPosePlayer]!="W"){
+		//check if hit a fruit or point, increase score
+		if(board[yPosePlayer+1][xPosePlayer]=="B" || board[yPosePlayer+1][xPosePlayer]=="S" || board[yPosePlayer+1][xPosePlayer]=="T" || board[yPosePlayer+1][xPosePlayer]=="C") {
+			Score+=50;
+		}
+		if(board[yPosePlayer+1][xPosePlayer]==".") {
+		Score+=10;
+		}
 		board[yPosePlayer][xPosePlayer]="E";
 		yPosePlayer++;
 	}
@@ -244,11 +276,6 @@ if(board[yPosePlayer][xPosePlayer]==".") {
 		return null;
 	}
 Player=[xPosePlayer,yPosePlayer];
-if(Score==1780){
-	GameOver();
-	alert("YOU WIN!");
-	return null; //to exit function
-}
 Redraw();
 }
 function Direction2Monster(){
@@ -267,122 +294,127 @@ function Direction2Monster(){
 	}
 let dx= Player[0]-RedMonster[0];
 let dy= Player[1]-RedMonster[1];
-//Update direction
+//Update direction if player is near
 if(dx>0 && Math.abs(dx)>Math.abs(dy)){
 	direction2='right';
 }
-else if(dx<0 && Math.abs(dx)>Math.abs(dy)){
+if(dx<0 && Math.abs(dx)>Math.abs(dy)){
 	direction2='left';
 }
-else if(dy>0 && Math.abs(dy)>Math.abs(dx)){
+if(dy>0 && Math.abs(dy)>Math.abs(dx)){
 	direction2='down';
 }
-else if(dy<0 && Math.abs(dy)>Math.abs(dx)){
+if(dy<0 && Math.abs(dy)>Math.abs(dx)){
 	direction2='up';
 }
 }
 function Direction3Monster(){
+	let dir= getRandom(4); //choose random direction
+	if(dir==1){
+		direction3='right';
+	}
+	else if(dir==2){
+		direction3='left';
+	}
+	else if(dir==3){
+		direction3='down';
+	}
+	else if(dir==4){
+		direction3='up';
+	}
 	let dx= Player[0]-OrangeMonster[0];
 	let dy= Player[1]-OrangeMonster[1];
-	//Update direction
+	//Update direction if player is near
 	if(dx>0 && Math.abs(dx)>Math.abs(dy)){
 		direction3='right';
 	}
-	else if(dx<0 && Math.abs(dx)>Math.abs(dy)){
+	if(dx<0 && Math.abs(dx)>Math.abs(dy)){
 		direction3='left';
 	}
-	else if(dy>0 && Math.abs(dy)>Math.abs(dx)){
+	if(dy>0 && Math.abs(dy)>Math.abs(dx)){
 		direction3='down';
 	}
-	else if(dy<0 && Math.abs(dy)>Math.abs(dx)){
+	if(dy<0 && Math.abs(dy)>Math.abs(dx)){
 		direction3='up';
-	}
-	else {
-		let dir= getRandom(4); //choose random direction
-		if(dir==1){
-			direction3='right';
-		}
-		else if(dir==2){
-			direction3='left';
-		}
-		else if(dir==3){
-			direction3='down';
-		}
-		else if(dir==4){
-			direction3='up';
-		}
 	}
 }
 function moveMonster(){
+	// First get player position
+	let xPosePlayer=Player[0];
+	let yPosePlayer=Player[1];
 	//red is direction2
 	let xPoseRedMonster=RedMonster[0];
 	let yPoseRedMonster=RedMonster[1];
 	if(direction2=="right" && board[yPoseRedMonster][xPoseRedMonster+1]!="W" && board[yPoseRedMonster][xPoseRedMonster+1]!="O") {
-		let next=board[yPoseRedMonster][xPoseRedMonster+1];
-		board[yPoseRedMonster][xPoseRedMonster]=next;
+		board[yPoseRedMonster][xPoseRedMonster]="E";
 		xPoseRedMonster++;
 	}
 	else if(direction2=="left" && board[yPoseRedMonster][xPoseRedMonster-1]!="W" && board[yPoseRedMonster][xPoseRedMonster+1]!="O") {
-		let next=board[yPoseRedMonster][xPoseRedMonster-1];
-		board[yPoseRedMonster][xPoseRedMonster]=next;
+		board[yPoseRedMonster][xPoseRedMonster]="E";
 		xPoseRedMonster--;
 	}
 	else if(direction2=="up" && board[yPoseRedMonster-1][xPoseRedMonster]!="W" && board[yPoseRedMonster][xPoseRedMonster+1]!="O") {
-		let next=board[yPoseRedMonster-1][xPoseRedMonster];
-		board[yPoseRedMonster][xPoseRedMonster]=next;
+		board[yPoseRedMonster][xPoseRedMonster]="E";
 		yPoseRedMonster--;
 	}
 	else if(direction2=="down" && board[yPoseRedMonster+1][xPoseRedMonster]!="W" && board[yPoseRedMonster][xPoseRedMonster+1]!="O") {
-		let next=board[yPoseRedMonster+1][xPoseRedMonster];
-		board[yPoseRedMonster][xPoseRedMonster]=next;
+		board[yPoseRedMonster][xPoseRedMonster]="E";
 		yPoseRedMonster++;
 	}
+	// Assign values
 	RedMonster=[xPoseRedMonster,yPoseRedMonster];
-
+	// If it hits player, remove it
+	if(board[yPoseRedMonster][xPoseRedMonster]==board[yPosePlayer][xPosePlayer]){
+		board[yPoseRedMonster][xPoseRedMonster]=="E";
+	}
 	//orange is direction3
 	let xPoseOrangeMonster=OrangeMonster[0];
 	let yPoseOrangeMonster=OrangeMonster[1];
 	if(direction3=="right" && board[yPoseOrangeMonster][xPoseOrangeMonster+1]!="W" && board[yPoseOrangeMonster][xPoseOrangeMonster+1]!="R") {
-		let next=board[yPoseOrangeMonster][xPoseOrangeMonster+1];
-		board[yPoseOrangeMonster][xPoseOrangeMonster]=next;
+		board[yPoseOrangeMonster][xPoseOrangeMonster]="E";
 		xPoseOrangeMonster++;
 	}
 	if(direction3=="left" && board[yPoseOrangeMonster][xPoseOrangeMonster-1]!="W" && board[yPoseOrangeMonster][xPoseOrangeMonster+1]!="R") {
-		let next=board[yPoseOrangeMonster][xPoseOrangeMonster-1];
-		board[yPoseOrangeMonster][xPoseOrangeMonster]=next;
+		board[yPoseOrangeMonster][xPoseOrangeMonster]="E";
 		xPoseOrangeMonster--;
 	}
 	if(direction3=="up" && board[yPoseOrangeMonster-1][xPoseOrangeMonster]!="W" && board[yPoseOrangeMonster][xPoseOrangeMonster+1]!="R") {
-		let next=board[yPoseOrangeMonster-1][xPoseOrangeMonster];
-		board[yPoseOrangeMonster][xPoseOrangeMonster]=next;
+		board[yPoseOrangeMonster][xPoseOrangeMonster]="E";
 		yPoseOrangeMonster--;
 	}
 	if(direction3=="down" && board[yPoseOrangeMonster+1][xPoseOrangeMonster]!="W" && board[yPoseOrangeMonster][xPoseOrangeMonster+1]!="R") {
-		let next=board[yPoseOrangeMonster+1][xPoseOrangeMonster];
-		board[yPoseOrangeMonster][xPoseOrangeMonster]=next;
+		board[yPoseOrangeMonster][xPoseOrangeMonster]="E";
 		yPoseOrangeMonster++;
 	}
+	// Assign values
 	OrangeMonster=[xPoseOrangeMonster,yPoseOrangeMonster];
+	// If it hits player, remove it
+	if(board[yPoseOrangeMonster][xPoseOrangeMonster]==board[yPosePlayer][xPosePlayer]){
+		board[yPoseOrangeMonster][xPoseOrangeMonster]=="E";
+	}
 	//updated
 	Redraw();
 }
+// Controls
+function Pause(){
+	clearInterval(Timer);
+	clearInterval(timer);
+}
+function Resume(){
+	Game();
+	timer= setInterval(Scoreboard, 200);
+}
 function GameOver(x){
 	clearInterval(Timer);
+	ClearGrid();
 	if(x=="Player"){
-		let xPosePlayer=Player[0];
-		let yPosePlayer=Player[1];
-		board[yPosePlayer][xPosePlayer]="E";
 		Player=[8,8];
-		let newxPosPlayer=Player[0];
-		let newyPosPlayer=Player[1];
-		board[newyPosPlayer][newxPosPlayer]="P";
 		direction='up';
 		Hearts--;
 		Redraw();
-		Timer=setInterval(Tick,300);
+		Timer=setInterval(Tick,500);
 	}
 	else {
-		ClearGrid();
 		board = [
 		['W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W'],
 		['W','.','.','.','.','W','.','.','.','.','.','W','.','.','.','.','W'],
@@ -415,46 +447,7 @@ function GameOver(x){
 		Strawberry=[15,1];
 		Watermelon=[1,17];
 		Cherry=[15,17];
-		for(let y in board){
-			for (let x in board[y]){
-				if(board[y][x]=='W') AddBlock(x,y,"Wall");
-				else if(board[y][x]=='.') AddBlock(x,y,"Point");
-		}
-		}
+		DrawBoard();
 		return;
 	}
-}
-// //Adds a block to the array
-// function addBlockToArray(){
-// 	//TODO: add a block to the array and draw the array
-// }
-
-// //Add a block of random color
-// function addRandomColorBlocktoArray() {
-// 	//TODO: add a block(s) of a random color to the array
-// }
-
-// function createNestedArray() {
-// 	//TODO: Make the blockArray a 20 by 20 nested array
-// }
-
-// //Call this function to draw the blockArray
-// function drawBlockArray() {
-// 	drawArray(blockArray);
-// }
-
-// //Will trigger when user clicks a block, and returns block position in array
-// //Will only work with nested, two-dimensional arrays!
-// function blockClickedEvent(x,y){
-// 	console.log(x,y);
-// }
-
-//Main Loop - This loop will be run every 100 milliseconds (every 0.1 second)
-//We can start and stop it by clicking the buttons on the html page
-function MainLoop()
-{
-	console.log('Main loop running');
-	
-	//TODO: Make the blockArray grid do something interesting here
-	
 }
