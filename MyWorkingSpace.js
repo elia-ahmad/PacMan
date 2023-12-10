@@ -35,8 +35,8 @@ var Watermelon=[1,17];
 var Cherry=[15,17];
 let Timer; //for Tick and movement
 let timer; //for score
-var Hearts=3;
-var Score=0;
+var Hearts;
+var Score;
 let direction="up";
 let direction2="right";
 let direction3="left";
@@ -194,7 +194,7 @@ if(board[yPosePlayer][xPosePlayer]=="O"|| board[yPosePlayer][xPosePlayer]=="R") 
 }
 //check if hit a fruit
 if(board[yPosePlayer][xPosePlayer]=="B" || board[yPosePlayer][xPosePlayer]=="S" || board[yPosePlayer][xPosePlayer]=="T" || board[yPosePlayer][xPosePlayer]=="C") {
-	Score+=50;
+	Score= Score+50;
 }
 if(board[yPosePlayer][xPosePlayer]=="B") {
 let xPoseBanana=Banana[0];
@@ -217,7 +217,7 @@ if(board[yPosePlayer][xPosePlayer]=="C") {
 	board[yPoseCherry][xPoseCherry]="E";
 }
 if(board[yPosePlayer][xPosePlayer]==".") {
-	Score+=10;
+	Score= Score+10;
 	let xPosPoint=Player[0];
 	let yPosPoint=Player[1];
 	board[yPosPoint][xPosPoint]="E";
@@ -252,6 +252,19 @@ if(Score==1780){
 Redraw();
 }
 function Direction2Monster(){
+	let dir= getRandom(4); //choose random direction
+	if(dir==1){
+		direction2='right';
+	}
+	else if(dir==2){
+		direction2='left';
+	}
+	else if(dir==3){
+		direction2='down';
+	}
+	else if(dir==4){
+		direction2='up';
+	}
 let dx= Player[0]-RedMonster[0];
 let dy= Player[1]-RedMonster[1];
 //Update direction
@@ -266,21 +279,6 @@ else if(dy>0 && Math.abs(dy)>Math.abs(dx)){
 }
 else if(dy<0 && Math.abs(dy)>Math.abs(dx)){
 	direction2='up';
-}
-else {
-	let dir= getRandom(4); //choose random direction
-	if(dir==1){
-		direction2='right';
-	}
-	else if(dir==2){
-		direction2='left';
-	}
-	else if(dir==3){
-		direction2='down';
-	}
-	else if(dir==4){
-		direction2='up';
-	}
 }
 }
 function Direction3Monster(){
