@@ -39,7 +39,7 @@ function clearAll(){
 
 	let errorSpace = document.getElementById("errorSpace_id");
 	errorSpace.innerText = "";
-	errorSpace.style['border'] = '4px rgb(144, 211, 255) dotted'
+	// errorSpace.style['border'] = '4px rgb(144, 211, 255) dotted'
 }
 // Page ready event
 window.addEventListener('load', function () {
@@ -50,7 +50,7 @@ window.addEventListener('load', function () {
 window.addEventListener("error", function (e) {
 	let errorSpace = document.getElementById("errorSpace_id");
 	errorSpace.innerText = "Your code has an error! Open the console with ctrl+f12 to view the error.";
-	errorSpace.style['border'] = '6px rgb(255, 0, 0) solid'
+	// errorSpace.style['border'] = '6px rgb(255, 0, 0) solid'
 	return false;
  })
  

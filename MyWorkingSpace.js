@@ -2,7 +2,8 @@
 // DATE: 21/11/2023
 // Assignment Title: PacMan
    /* I've done this project with the help of W3Schools and the snake game, 
-   i learned some features of css, html, and some for javascript too*/
+   I learned some features of css, html, and some for javascript too.
+   I even added sound effects :) */
 //Global variable that stores the grid
 let board = [
 ['W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W'],
@@ -123,34 +124,16 @@ function Scoreboard(){
 clearAll();
 print("Score: "+Score);
 print("Lives: "+Hearts);
-let count=0;
-for(let y=0;y< board.length;y++){
-	for (let x=0;x< board[y].length;x++){
-		if(board[y][x]=="E"){
-			count++;
-		}
-		if(count==163){ 
-			//163 is the number of spaces aside from walls, and characters
-			//if all those spaces are Empty, that means no more points or fruits left
-			GameOver();
-			alert("Game Over! Your score is "+Score);
-			return null; // End Game
-		}
-	}
-}
 }
 function start(){
+	// Stop game then redo entire game for new game
+	clearInterval(Timer);
+	clearInterval(timer);
 	Hearts=3;
 	Score=0;
     Player=[8,8];
     RedMonster=[8,3];
 	OrangeMonster=[8,14];
-	Game();
-}
-function Game(){
-	// Stop game then redo entire game for new game
-	clearInterval(Timer);
-	clearInterval(timer);
 	//Create the grid
 	// Reinitialize board to avoid double click of button problem
 	board = [
@@ -175,19 +158,15 @@ function Game(){
 		['W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W','W']
 		];
 	DrawBoard();
+	Game();
+	let arcade = document.getElementById("arcade"); //Call mp3 file
+  	arcade.play(); //Play arcade audio
+}
+function Game(){
 	Timer=setInterval(Tick,500);
 	document.addEventListener("keydown",KeyPressed);
 	Scoreboard();
 	timer= setInterval(Scoreboard, 200);
-	
-
-	//TODO: change this to setup the grid you want
-	//Reset block array variable
-	// blockArray = [];
-	//Add a red block
-	// blockArray.push("red");
-	//Draw the block array
-	// drawBlockArray(blockArray);
 }
 // Main loop
 function Tick(){
@@ -195,7 +174,7 @@ function Tick(){
 	Direction2Monster();
 	Direction3Monster();
 	moveMonster();
-	console.log(Score);
+	EndGame();
 }
 // Directions and movement
 function KeyPressed(event){
@@ -217,11 +196,15 @@ function movePlayer(){
 //check if hit a Monster
 if(board[yPosePlayer][xPosePlayer]=="O"|| board[yPosePlayer][xPosePlayer]=="R") {	
 	if(Hearts==0){
+		let arcade = document.getElementById("arcade"); //Call mp3 file
+  	 	arcade.play(); //Play arcade audio
+		alert("GAME OVER! Your score: "+Score);
 		GameOver();
-		alert("GAME OVER!");
 		return null; //to exit function
 	}
 	else {
+		let eaten = document.getElementById("eaten"); //Call mp3 file
+  	  	eaten.play(); //Play eaten audio
 		GameOver('Player');
 		return null; //to exit function
 	}
@@ -231,9 +214,13 @@ if(board[yPosePlayer][xPosePlayer]=="O"|| board[yPosePlayer][xPosePlayer]=="R") 
 		//check if hit a fruit or point, increase score
 		if(board[yPosePlayer-1][xPosePlayer]=="B" || board[yPosePlayer-1][xPosePlayer]=="S" || board[yPosePlayer-1][xPosePlayer]=="T" || board[yPosePlayer-1][xPosePlayer]=="C") {
 			Score+=50;
+			let fruit = document.getElementById("fruit"); //Call mp3 file
+  	  		fruit.play(); //Play fruit audio
 		}
 		if(board[yPosePlayer-1][xPosePlayer]==".") {
 		Score+=10;
+		let point = document.getElementById("point"); //Call mp3 file
+  	  	point.play(); //Play point audio
 		}
 		board[yPosePlayer][xPosePlayer]="E";
 		yPosePlayer--;
@@ -242,9 +229,13 @@ if(board[yPosePlayer][xPosePlayer]=="O"|| board[yPosePlayer][xPosePlayer]=="R") 
 		//check if hit a fruit or point, increase score
 		if(board[yPosePlayer][xPosePlayer+1]=="B" || board[yPosePlayer][xPosePlayer+1]=="S" || board[yPosePlayer][xPosePlayer+1]=="T" || board[yPosePlayer][xPosePlayer+1]=="C") {
 			Score+=50;
+			let fruit = document.getElementById("fruit"); //Call mp3 file
+			fruit.play(); //Play fruit audio
 		}
 		if(board[yPosePlayer][xPosePlayer+1]==".") {
 		Score+=10;
+		let point = document.getElementById("point"); //Call mp3 file
+		point.play(); //Play point audio
 		}
 		board[yPosePlayer][xPosePlayer]="E";
 		xPosePlayer++;
@@ -253,9 +244,13 @@ if(board[yPosePlayer][xPosePlayer]=="O"|| board[yPosePlayer][xPosePlayer]=="R") 
 		//check if hit a fruit or point, increase score
 		if(board[yPosePlayer][xPosePlayer-1]=="B" || board[yPosePlayer][xPosePlayer-1]=="S" || board[yPosePlayer][xPosePlayer-1]=="T" || board[yPosePlayer][xPosePlayer-1]=="C") {
 		Score+=50;
+		let fruit = document.getElementById("fruit"); //Call mp3 file
+		fruit.play(); //Play fruit audio
 		}
 		if(board[yPosePlayer][xPosePlayer-1]==".") {
 		Score+=10;
+		let point = document.getElementById("point"); //Call mp3 file
+		point.play(); //Play point audio
 		}
 		board[yPosePlayer][xPosePlayer]="E";
 		xPosePlayer--;
@@ -264,9 +259,13 @@ if(board[yPosePlayer][xPosePlayer]=="O"|| board[yPosePlayer][xPosePlayer]=="R") 
 		//check if hit a fruit or point, increase score
 		if(board[yPosePlayer+1][xPosePlayer]=="B" || board[yPosePlayer+1][xPosePlayer]=="S" || board[yPosePlayer+1][xPosePlayer]=="T" || board[yPosePlayer+1][xPosePlayer]=="C") {
 			Score+=50;
+			let fruit = document.getElementById("fruit"); //Call mp3 file
+			fruit.play(); //Play fruit audio
 		}
 		if(board[yPosePlayer+1][xPosePlayer]==".") {
 		Score+=10;
+		let point = document.getElementById("point"); //Call mp3 file
+		point.play(); //Play point audio
 		}
 		board[yPosePlayer][xPosePlayer]="E";
 		yPosePlayer++;
@@ -402,7 +401,6 @@ function Pause(){
 }
 function Resume(){
 	Game();
-	timer= setInterval(Scoreboard, 200);
 }
 function GameOver(x){
 	clearInterval(Timer);
@@ -450,4 +448,23 @@ function GameOver(x){
 		DrawBoard();
 		return;
 	}
+}
+function EndGame(){
+	let count=0;
+for(let y=0;y< board.length;y++){
+	for (let x=0;x< board[y].length;x++){
+		if(board[y][x]=="E"){
+			count++;
+		}
+		if(count==163){ 
+			//163 is the number of spaces aside from walls, and characters
+			//if all those spaces are Empty, that means no more points or fruits left
+			let arcade = document.getElementById("arcade"); //Call mp3 file
+  	 		arcade.play(); //Play arcade audio
+			alert("GAME OVER! Your score is "+Score);
+			GameOver();
+			return null; // End Game
+		}
+	}
+}
 }
